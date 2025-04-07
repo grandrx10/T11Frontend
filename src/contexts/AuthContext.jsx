@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const AuthContext = createContext(null);
-
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:3000';
 /*
  * This provider should export a `user` context state that is 
  * set (to non-null) when:
@@ -13,7 +13,6 @@ const AuthContext = createContext(null);
  *     2. the user just logged out.
  */
 export const AuthProvider = ({ children }) => {
-    const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:3000';
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
 
@@ -66,6 +65,8 @@ export const AuthProvider = ({ children }) => {
      */
     const login = async (username, password) => {
         try {
+            // Temporarily add this to your login function
+            console.log('Attempting login to:', BACKEND_URL + '/login');
             const response = await fetch (BACKEND_URL + '/login', {
                 method: "POST",
                 headers: {
