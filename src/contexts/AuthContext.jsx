@@ -108,19 +108,24 @@ export const AuthProvider = ({ children }) => {
                 },
                 body: JSON.stringify(userData)
             });
-
+    
             if (!response.ok) {
-                console.log(response);
-                return null;
+                // Parse error response for both JSON and text fallback
+                const errorText = await response.text();
+                try {
+                    const errorData = JSON.parse(errorText);
+                    return errorData.message || 'Registration failed';
+                } catch {
+                    return errorText || 'Registration failed';
+                }
             }
-
+    
             navigate('/success');
-
             return null;
-
-        } catch (err){
-            console.log(err);
-            return err.message;
+    
+        } catch (err) {
+            console.error('Registration error:', err);
+            return err.message || 'An unexpected error occurred';
         }
     };
 
